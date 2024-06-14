@@ -1,5 +1,5 @@
 from flask import Flask, request
-
+import classification as clf
 app = Flask(__name__)
 
 stores = [
@@ -36,5 +36,7 @@ def post_store():
         "name": request_data["name"], 
         "items":[]
         }
-    stores.append(new_store) #append new store to the list
+    image = stores.append(new_store) #append new store to the list
+    prediction_result = clf.classification(image)
     return new_store, 201 #return the store and status code
+
