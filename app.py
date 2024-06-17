@@ -2,6 +2,7 @@ import os
 
 from flask import Flask, request
 from flask import render_template
+from flask import jsonify
 
 from distutils.log import debug 
 from fileinput import filename 
@@ -22,20 +23,12 @@ def success():
     if request.method == 'POST':   
         print(request.files['file'])
         f = request.files['file'] 
-        # f.save(f.filename)   
-        # f.save(os.path.join("uploads", f.filename))
         f.save(os.path.join("static/uploads", f.filename))
 
         prediction_result = clf.classification(f.filename)
         print(prediction_result)
 
-        result = {
-        "name": f.filename, 
-        "prediction": prediction_result
-        }
-
         return render_template("result.html", name = f.filename)   
-        # render_template("result.html", name=f.filename, prediction=prediction_result)
 
 
 
@@ -45,12 +38,20 @@ def upload_walet():
     if request.method == 'POST':   
         print(request.files['file'])
         f = request.files['file']
-        
+        f.save(os.path.join("static/uploads", f.filename))
+
+
+        prediction_result = clf.classification(f.filename)
+
+        prediction = "walet" if prediction_result == 0 else "not walet"
+
         data_result = {
-        "name": f.filename,
+            "msg": "success",
+            "name": f.filename,
+            "prediction": prediction
         }
 
-        return data_result, 201
+        return jsonify(data_result)
         
 
 
