@@ -16,9 +16,9 @@ from tensorflow.keras.preprocessing.image import ImageDataGenerator, load_img
 import utils as ut
 
 
-MODEL_LOC = 'db/model.json'
-WEIGHT_LOC = 'db/weights.h5'
-LABEL_LOC = 'db/label.json'
+MODEL_LOC = 'swift-flask-api\model-sarang-walet.h5'
+# WEIGHT_LOC = 'db/weights.h5'
+# LABEL_LOC = 'db/label.json'
 # img_path = 'path_to_your_image.jpg'
 
 class classification():
