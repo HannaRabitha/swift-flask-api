@@ -1,7 +1,61 @@
+import os
+
 from flask import Flask, request
+from flask import render_template
+
+from distutils.log import debug 
+from fileinput import filename 
+from flask import *  
+
 import classification as clf
+
+
 app = Flask(__name__)
 
+@app.route('/')   
+def main():   
+    return render_template("index.html")  
+
+
+@app.route('/upload', methods = ['POST'])   
+def success():   
+    if request.method == 'POST':   
+        print(request.files['file'])
+        f = request.files['file'] 
+        # f.save(f.filename)   
+        # f.save(os.path.join("uploads", f.filename))
+        f.save(os.path.join("static/uploads", f.filename))
+
+        prediction_result = clf.classification(f.filename)
+        print(prediction_result)
+
+        result = {
+        "name": f.filename, 
+        "prediction": prediction_result
+        }
+
+        return render_template("result.html", name = f.filename)   
+        # render_template("result.html", name=f.filename, prediction=prediction_result)
+
+
+
+# endpoint return json data
+@app.route('/walet', methods = ['POST'])
+def upload_walet():   
+    if request.method == 'POST':   
+        print(request.files['file'])
+        f = request.files['file']
+        
+        data_result = {
+        "name": f.filename,
+        }
+
+        return data_result, 201
+        
+
+
+
+# EXAMPLE CODE ==========================
 stores = [
     {
     "name": "Ekaabo Cosmetics",
@@ -19,7 +73,6 @@ stores = [
        "price": 12.46}]
     }
     ]
-
 
 # METHOD GET DATA
 
@@ -40,3 +93,6 @@ def post_store():
     prediction_result = clf.classification(image)
     return new_store, 201 #return the store and status code
 
+
+if __name__ == '__main__':
+    app.run(debug=True)

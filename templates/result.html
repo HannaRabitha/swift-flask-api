@@ -1,0 +1,21 @@
+<html>
+  <head>
+    <title>success</title>
+  </head>
+  <body>
+    <p style="color: green; font-size: 20px">File uploaded successfully</p>
+    <p>File Name: {{name}}</p>
+
+    <img
+      src="{{
+      url_for('static', filename='uploads/' + name)
+    }}"
+      alt="image"
+      height="400"
+    />
+
+    <p style="color: blue; font-size: 40px; text-align: center">
+      Prediction: {{prediction}}
+    </p>
+  </body>
+</html>

@@ -1,7 +1,6 @@
 import os
 import json
 import numpy as np
-import numpy as np
 import pandas as pd
 from os import listdir
 import tensorflow as tf
@@ -20,17 +19,21 @@ import utils as ut
 MODEL_LOC = 'db/model.json'
 WEIGHT_LOC = 'db/weights.h5'
 LABEL_LOC = 'db/label.json'
-img_path = 'path_to_your_image.jpg'
+# img_path = 'path_to_your_image.jpg'
 
-class classification:
+class classification():
 
-    def start_classification(img_path):
+    def __init__(self, img_path):
+        self.img_path = img_path
+
+    def start_classification(self):
         #load and preprocessing
-        img_array = ut.load_and_preprocess_image(img_path)
+        img_array = ut.load_and_preprocess_image(self.img_path)
         
         #get model data
         model = ut.getmodel(MODEL_LOC)
         
         # Predict the class
         predictions = ut.prediction(model,img_array)
+        print(predictions)
         return predictions
