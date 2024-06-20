@@ -27,10 +27,29 @@ def success():
         f = request.files['file'] 
         f.save(os.path.join("static/uploads", f.filename))
 
-        prediction_result = clf.classification(f.filename)
-        print(prediction_result)
+        path_name = os.path.join("static/uploads", f.filename)
 
-        return render_template("result.html", name = f.filename)   
+        print(path_name)
+        prediction_result = cls.start_classification(path_name)
+
+        if prediction_result == 0:
+            prediction = "Mangkok"
+        elif prediction_result == 1:
+            prediction = "Oval"
+        else:
+            prediction = "Sudut"
+
+        print(prediction)
+        print(prediction_result)
+        data_result = {
+            "msg": "success",
+            "name": f.filename,
+            "prediction_result": str(prediction_result),
+            "prediction": prediction
+        }
+
+        # return jsonify(data_result)
+        return render_template("result.html", name = f.filename)  
 
 
 
@@ -47,11 +66,12 @@ def upload_walet():
         path_name = os.path.join("static/uploads", f.filename)
 
         print(path_name)
-        prediction_result = cls.start_classification(path_name)
+        
 
         # prediction = "Mangkok" if prediction_result == 0 else "Oval" if prediction_result == 1 else "Sudut"
 
         # prediction_result = int(clf.classification(f.filename))
+        prediction_result = cls.start_classification(path_name)
         
         if prediction_result == 0:
             prediction = "Mangkok"
@@ -59,6 +79,9 @@ def upload_walet():
             prediction = "Oval"
         else:
             prediction = "Sudut"
+        
+        print(prediction_result)
+        print(prediction)
 
         data_result = {
             "msg": "success",
@@ -73,23 +96,23 @@ def upload_walet():
 
 
 # EXAMPLE CODE ==========================
-stores = [
-    {
-    "name": "Ekaabo Cosmetics",
-    "items":[
-    {"name" : "lip gel",
-     "price" : 20.36
-     },
-    {"name" : "moisturizer",
-     "price" : 38.90
-     }, 
-     {"name" : "hair wigs",
-      "price" : 50.89
-      },
-      {"name" : "Body Cream",
-       "price": 12.46}]
-    }
-    ]
+# stores = [
+#     {
+#     "name": "Ekaabo Cosmetics",
+#     "items":[
+#     {"name" : "lip gel",
+#      "price" : 20.36
+#      },
+#     {"name" : "moisturizer",
+#      "price" : 38.90
+#      }, 
+#      {"name" : "hair wigs",
+#       "price" : 50.89
+#       },
+#       {"name" : "Body Cream",
+#        "price": 12.46}]
+#     }
+#     ]
 
 # METHOD GET DATA
 

@@ -14,11 +14,14 @@ from tensorflow.keras.metrics import Precision, Recall
 import tensorflow_addons as tfa
 from sklearn.metrics import precision_score, recall_score, f1_score
 from tensorflow.keras.callbacks import ModelCheckpoint, EarlyStopping
-from tensorflow.keras.preprocessing.image import load_img
+from tensorflow.keras.preprocessing.image import load_img, img_to_array
 from PIL import Image, ImageFilter
 from skimage.filters import median, unsharp_mask
 
+from tensorflow.keras.models import load_model
+
 import utils as ut
+
 
 
 MODEL_LOC = 'model-sarang-walet.h5'
@@ -44,8 +47,8 @@ class Classification:
     #     return predictions
 
     def start_classification(self, img_path, target_size=(380, 380)):
-        img = image.load_img(img_path, target_size=target_size)
-        img_array = image.img_to_array(img)
+        img = load_img(img_path, target_size=target_size)
+        img_array = img_to_array(img)
         img_array = np.expand_dims(img_array, axis=0)  
         img_array /= 255.0  
     
