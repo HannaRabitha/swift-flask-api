@@ -10,6 +10,8 @@ from flask import *
 
 import classification as clf
 
+cls = clf.Classification()
+
 
 app = Flask(__name__)
 
@@ -38,16 +40,30 @@ def upload_walet():
     if request.method == 'POST':   
         print(request.files['file'])
         f = request.files['file']
+
+        
         f.save(os.path.join("static/uploads", f.filename))
 
+        path_name = os.path.join("static/uploads", f.filename)
 
-        prediction_result = clf.classification(f.filename)
+        print(path_name)
+        prediction_result = cls.start_classification(path_name)
 
-        prediction = "walet" if prediction_result == 0 else "not walet"
+        # prediction = "Mangkok" if prediction_result == 0 else "Oval" if prediction_result == 1 else "Sudut"
+
+        # prediction_result = int(clf.classification(f.filename))
+        
+        if prediction_result == 0:
+            prediction = "Mangkok"
+        elif prediction_result == 1:
+            prediction = "Oval"
+        else:
+            prediction = "Sudut"
 
         data_result = {
             "msg": "success",
             "name": f.filename,
+            "prediction_result": str(prediction_result),
             "prediction": prediction
         }
 
@@ -96,4 +112,4 @@ def post_store():
 
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run()
