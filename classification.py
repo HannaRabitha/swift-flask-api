@@ -19,32 +19,32 @@ from PIL import Image, ImageFilter
 from skimage.filters import median, unsharp_mask
 
 from tensorflow.keras.models import load_model
-
 import utils as ut
+import subprocess
 
 
+REPO_URL = 'https://github.com/HannaRabitha/model-sarang-walet.git'
+REPO_DIR = 'model-sarang-walet'
 
-MODEL_LOC = 'model-sarang-walet.h5'
-# WEIGHT_LOC = 'db/weights.h5'
-# LABEL_LOC = 'db/label.json'
-# img_path = 'path_to_your_image.jpg'
+# Clone the repository
+if not os.path.exists(REPO_DIR):
+    subprocess.run(['git', 'clone', REPO_URL])
+
+# Function to find the model file
+def find_model_file(repo_dir, extension=".h5"):
+    for root, dirs, files in os.walk(repo_dir):
+        for file in files:
+            if file.endswith(extension):
+                return os.path.join(root, file)
+    return None
+
+# Get the model path
+MODEL_PATH = find_model_file(REPO_DIR)
+if MODEL_PATH is None:
+    raise FileNotFoundError("Model file not found in the repository")
+
 
 class Classification:
-
-    # def __init__(self, img_path):
-    #     self.img_path = img_path
-
-    # def start_classification(self):
-    #     #load and preprocessing
-    #     img_array = ut.load_and_preprocess_image(self.img_path)
-        
-    #     #get model data
-    #     model = ut.getmodel(MODEL_LOC)
-        
-    #     # Predict the class
-    #     predictions = ut.prediction(model,img_array)
-    #     print(predictions)
-    #     return predictions
 
     def start_classification(self, img_path, target_size=(380, 380)):
         img = load_img(img_path, target_size=target_size)
@@ -52,7 +52,7 @@ class Classification:
         img_array = np.expand_dims(img_array, axis=0)  
         img_array /= 255.0  
     
-        model = load_model(MODEL_LOC)
+        model = load_model(MODEL_PATH)
     
         predictions = model.predict(img_array)
         predicted_class = np.argmax(predictions, axis=1)
